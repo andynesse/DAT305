@@ -62,5 +62,4 @@ def dfs_to_windows(dfs, window_method, *args, **kwargs):
     dfs_list = []
     for df in dfs:
         dfs_list.append(dict_to_df(to_windows(df, window_method, *args, **kwargs)))
-    dfs_list = [df.set_index('id') for df in dfs_list]
-    return pd.concat(dfs, axis=1)
+    return pd.concat(dfs_list, axis=0, ignore_index=True)
