@@ -1,5 +1,7 @@
 import numpy as np
-from . import magnitude
+import pandas as pd
+
+from . import magnitude, dict_to_df
 
 WINDOW_SIZE = 40
 ACTIVITIES = {0 : 0, 1 : 1, 2 : 1, 3 : 1, 4 : 0, 5 : 0}
@@ -55,3 +57,10 @@ def window_by_values(df, target, predictor_groups):
         window[f'q3_{t}'] = np.quantile(values, 0.75)
 
     return window
+
+def dfs_to_windows(dfs, window_method, *args, **kwargs):
+    dfs_list = []
+    for df in dfs:
+        dfs_list.append(dict_to_df(to_windows(df, window_method, *args, **kwargs)))
+    dfs_list = [df.set_index('id') for df in dfs_list]
+    return pd.concat(dfs, axis=1)
