@@ -1,3 +1,4 @@
+import numpy as np
 from . import magnitude
 
 WINDOW_SIZE = 40
@@ -35,5 +36,22 @@ def window_by_magnitude(df, target, predictor_groups):
             window[f"mag_{t}_{i}"] = magnitude(df[x].iloc[i], df[y].iloc[i], df[z].iloc[i])
     return window
 
-def window_by_values(df, target, parameters):
-    pass
+def window_by_values(df, target, predictor_groups):
+    n = len(df)
+    window = {target : ACTIVITIES[df[target].iloc[0]]}
+    for predictor_group in predictor_groups:
+        t = predictor_group[0]
+        x,y,z = predictor_group[1:]
+        values = []
+        for i in range(n):
+            values.append(magnitude(df[x].iloc[i], df[y].iloc[i], df[z].iloc[i]))
+        values = np.array(values)
+        window[f'mean_{t}'] = np.mean(values)
+        window[f'std_{t}'] = np.std(values)
+        window[f'min_{t}'] = np.min(values)
+        window[f'max_{t}'] = np.max(values)
+        window[f'q1_{t}'] = np.quantile(values, 0.25)
+        window[f'q2_{t}'] = np.quantile(values, 0.5)
+        window[f'q3_{t}'] = np.quantile(values, 0.75)
+
+    return window
