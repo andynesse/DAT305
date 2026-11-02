@@ -23,9 +23,11 @@ def window_by_parameters(df, target, predictors):
     """
     n = len(df)
     window = {target : ACTIVITIES[df[target].iloc[0]]}
+    
     for predictor in predictors:
-        for i in range(n):
-            window[f"{predictor}_{i}"] = df[predictor].iloc[i]
+        values = df[predictor].to_numpy()
+        window.update({f"{predictor}_{i}" : values[i] for i in range(n)})
+
     return window
 
 def window_by_magnitude(df, target, predictor_groups):
@@ -34,20 +36,18 @@ def window_by_magnitude(df, target, predictor_groups):
     for predictor_group in predictor_groups:
         t = predictor_group[0]
         x,y,z = predictor_group[1:]
-        for i in range(n):
-            window[f"mag_{t}_{i}"] = magnitude(df[x].iloc[i], df[y].iloc[i], df[z].iloc[i])
+        values = np.array(magnitude(df[x].to_numpy(), df[y].to_numpy(), df[z].to_numpy()))
+        window.update({f"mag_{t}_{i}" : values[i] for i in range(n)})
     return window
 
 def window_by_values(df, target, predictor_groups):
-    n = len(df)
     window = {target : ACTIVITIES[df[target].iloc[0]]}
     for predictor_group in predictor_groups:
         t = predictor_group[0]
         x,y,z = predictor_group[1:]
-        values = []
-        for i in range(n):
-            values.append(magnitude(df[x].iloc[i], df[y].iloc[i], df[z].iloc[i]))
-        values = np.array(values)
+
+        values = np.array(magnitude(df[x].to_numpy(), df[y].to_numpy(), df[z].to_numpy()))
+        
         window[f'mean_{t}'] = np.mean(values)
         window[f'std_{t}'] = np.std(values)
         window[f'min_{t}'] = np.min(values)
