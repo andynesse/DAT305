@@ -1,3 +1,4 @@
+from keras.callbacks import EarlyStopping
 from src.functions import normalize, target_predictors_separate
 
 class TrainingData:
@@ -11,10 +12,19 @@ class TrainingData:
     def n_cols(self):
         return self.predictors_norm.shape[1]
 
-    def fit(self, model, validation_split=0.3, epochs=100):
+    def fit(self, model, validation_split=0.3, epochs=100, early_stopping = False):
+        es = None
+        if early_stopping:
+            es = [EarlyStopping(
+                monitor = 'val_loss',
+                patience = 10,
+                mode = 'max',
+                restore_best_weights=True
+            )]
         return model.fit(
             self.predictors_norm,
             self.target,
             validation_split=validation_split,
-            epochs=epochs
+            epochs=epochs,
+            callbacks=es
         )
