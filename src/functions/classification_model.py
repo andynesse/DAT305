@@ -7,9 +7,9 @@ def classification_model(n_cols):
     model = Sequential()
     model.add(Dense(n_cols, activation='relu', input_shape=(n_cols,)))
     model.add(Dense(100, activation='relu'))
-    model.add(Dense(2, activation='softmax'))
+    model.add(Dense(1, activation='sigmoid'))
 
 
     # compile model
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     return model

@@ -17,8 +17,8 @@ class TrainingData:
         if early_stopping:
             es = [EarlyStopping(
                 monitor = 'val_loss',
-                patience = 10,
-                mode = 'max',
+                patience = 3,
+                mode = 'min',
                 restore_best_weights=True
             )]
         return model.fit(
