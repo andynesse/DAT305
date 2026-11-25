@@ -1,6 +1,5 @@
 from .target_predictors_separate import target_predictors_separate
 from .load_data import load_data
-from .regression_model import regression_model
 from .classification_model import classification_model
 from .magnetude import magnitude
 from .dict_to_df import dict_to_df
