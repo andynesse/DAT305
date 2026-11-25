@@ -59,8 +59,9 @@ def window_by_values(df, target, predictor_groups):
 
     return window
 
-def dfs_to_windows(dfs, window_method, *args, **kwargs):
+def dfs_to_windows(dfs, window_method,*args, **kwargs):
     dfs_list = []
     for df in dfs:
         dfs_list.append(dict_to_df(to_windows(df, window_method, *args, **kwargs)))
+    
     return pd.concat(dfs_list, axis=0, ignore_index=True)
