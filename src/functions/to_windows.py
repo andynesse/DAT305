@@ -9,10 +9,11 @@ ACTIVITIES = {0 : 0, 1 : 1, 2 : 1, 3 : 1, 4 : 0, 5 : 0}
 def to_windows(df, window_method, *args, **kwargs):
     result = []
     left = 0
-    while left < len(df) - WINDOW_SIZE:
+    while left <= len(df) - WINDOW_SIZE:
         window_df = df.iloc[left : left + WINDOW_SIZE]
         left += WINDOW_SIZE
-        if window_df['activity'].std() != 0.0:
+        activities_converted = window_df.activity.map(ACTIVITIES)
+        if activities_converted.nunique() != 1:
             continue
         result.append(window_method(window_df, *args, **kwargs))
     return result
